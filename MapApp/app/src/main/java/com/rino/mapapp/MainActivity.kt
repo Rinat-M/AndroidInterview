@@ -6,10 +6,14 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.*
 import com.rino.mapapp.ui.theme.MapAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,12 +21,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MapAppTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    MyGoogleMap()
                 }
             }
         }
@@ -30,14 +33,26 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
+private fun MyGoogleMap() {
+    val moscow = LatLng(55.751244, 37.618423)
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(moscow, 10f)
+    }
 
-@Preview(showSystemUi = true)
-@Composable
-fun DefaultPreview() {
-    MapAppTheme {
-        Greeting("Android")
+    val mapUiSettings by remember { mutableStateOf(MapUiSettings(myLocationButtonEnabled = true)) }
+    val mapProperties by remember { mutableStateOf(MapProperties(isMyLocationEnabled = false)) }
+
+    GoogleMap(
+        modifier = Modifier.fillMaxSize(),
+        cameraPositionState = cameraPositionState,
+        uiSettings = mapUiSettings,
+        properties = mapProperties,
+        onMyLocationButtonClick = { false }
+    ) {
+        Marker(
+            state = MarkerState(position = moscow),
+            title = "Moscow",
+            snippet = "Marker in Moscow"
+        )
     }
 }
