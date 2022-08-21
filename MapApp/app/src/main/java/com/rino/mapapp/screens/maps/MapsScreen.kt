@@ -20,10 +20,9 @@ import com.rino.mapapp.base.MapMarker
 
 @Composable
 fun MapsScreen(
-    modifier: Modifier = Modifier,
-    mapsViewModel: MapsViewModel = viewModel()
+    mapsViewModel: MapsViewModel = viewModel(),
+    onNavigateToMarkers: () -> Unit
 ) {
-
     var isMapLoaded by remember {
         mutableStateOf(false)
     }
@@ -45,7 +44,7 @@ fun MapsScreen(
     }
 
     MyGoogleMap(
-        modifier = modifier,
+        modifier = Modifier,
         mapProperties = mapProperties,
         mapUiSettings = mapUiSettings,
         cameraPositionState = cameraPositionState,
@@ -58,7 +57,7 @@ fun MapsScreen(
         }
     )
 
-    MarkersIconButton(modifier = modifier, onButtonClick = {})
+    MarkersIconButton(modifier = Modifier, onButtonClick = { onNavigateToMarkers() })
     ProgressIndicator(loadingIsComplete = isMapLoaded)
 }
 
