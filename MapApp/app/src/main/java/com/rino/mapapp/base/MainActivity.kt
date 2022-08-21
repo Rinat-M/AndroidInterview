@@ -1,4 +1,4 @@
-package com.rino.mapapp
+package com.rino.mapapp.base
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,6 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.rino.mapapp.screens.maps.MapsScreen
 import com.rino.mapapp.ui.theme.MapAppTheme
 
 class MainActivity : ComponentActivity() {

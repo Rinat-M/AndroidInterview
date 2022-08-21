@@ -1,4 +1,4 @@
-package com.rino.mapapp
+package com.rino.mapapp.base
 
 import com.google.android.gms.maps.model.LatLng
 

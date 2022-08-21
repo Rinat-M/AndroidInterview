@@ -1,8 +1,9 @@
-package com.rino.mapapp
+package com.rino.mapapp.screens.maps
 
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.model.LatLng
+import com.rino.mapapp.base.MapMarker
 
 class MapsViewModel : ViewModel() {
     val defaultMarker = MapMarker(

@@ -1,4 +1,4 @@
-package com.rino.mapapp
+package com.rino.mapapp.screens.maps
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
@@ -14,6 +14,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
+import com.rino.mapapp.RequestLocationPermissions
+import com.rino.mapapp.base.MapMarker
 
 @Composable
 fun MapsScreen(
