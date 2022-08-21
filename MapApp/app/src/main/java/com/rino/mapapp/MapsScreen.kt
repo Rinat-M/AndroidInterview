@@ -10,13 +10,16 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 
 @Composable
-fun MapsScreen() {
-    val moscow = MapMarker(LatLng(55.751244, 37.618423), "Moscow", "Marker in Moscow")
+fun MapsScreen(
+    modifier: Modifier = Modifier,
+    mapsViewModel: MapsViewModel = viewModel()
+) {
 
     var isMapLoaded by remember {
         mutableStateOf(false)
@@ -28,9 +31,8 @@ fun MapsScreen() {
         mutableStateOf(MapProperties(isMyLocationEnabled = false))
     }
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(moscow.latLng, 10f)
+        position = CameraPosition.fromLatLngZoom(mapsViewModel.defaultMarker.latLng, 10f)
     }
-    val markers = remember { listOf(moscow).toMutableStateList() }
 
     RequestLocationPermissions { isMyLocationEnabled ->
         mapProperties = mapProperties
@@ -40,17 +42,15 @@ fun MapsScreen() {
     }
 
     MyGoogleMap(
+        modifier = modifier,
         mapProperties = mapProperties,
         mapUiSettings = mapUiSettings,
         cameraPositionState = cameraPositionState,
-        markers = markers,
+        markers = mapsViewModel.markers,
         onMapLoaded = { isMapLoaded = true },
         onMapClick = { point ->
-            markers.add(
-                MapMarker(
-                    point,
-                    "{Lat=${point.latitude};Lng=${point.longitude}"
-                )
+            mapsViewModel.add(
+                MapMarker(point, "{Lat=${point.latitude};Lng=${point.longitude}")
             )
         }
     )
