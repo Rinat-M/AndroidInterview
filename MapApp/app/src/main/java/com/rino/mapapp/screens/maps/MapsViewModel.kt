@@ -15,6 +15,8 @@ class MapsViewModel : ViewModel() {
     private val _markers = listOf(defaultMarker).toMutableStateList()
     val markers: List<MapMarker> get() = _markers
 
+    private var selectedMarker: MapMarker? = null
+
     fun add(item: MapMarker) {
         _markers.add(item)
     }
@@ -22,4 +24,21 @@ class MapsViewModel : ViewModel() {
     fun remove(item: MapMarker) {
         _markers.remove(item)
     }
+
+    fun setSelectedMarker(marker: MapMarker) {
+        selectedMarker = marker
+    }
+
+    fun getSelectedMarker() = selectedMarker
+
+    fun updateMarkerInList(title: String, description: String) {
+        val indexOfMarker = _markers.indexOf(selectedMarker)
+        if (indexOfMarker != -1) {
+            val marker = selectedMarker!!
+            val modifiedMarker = marker.copy(title = title, description = description)
+            _markers[indexOfMarker] = modifiedMarker
+            selectedMarker = modifiedMarker
+        }
+    }
+
 }

@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.rino.mapapp.screens.maps.MapsScreen
 import com.rino.mapapp.screens.maps.MapsViewModel
+import com.rino.mapapp.screens.markeritem.MarkerItemScreen
 import com.rino.mapapp.screens.markers.MarkersScreen
 import com.rino.mapapp.ui.theme.MapAppTheme
 
@@ -38,7 +39,13 @@ fun MyApp() {
                     onNavigateToMarkers = { navController.navigate(Screen.Markers.route) })
             }
             composable(Screen.Markers.route) {
-                MarkersScreen(mapsViewModel = mapsViewModel)
+                MarkersScreen(
+                    mapsViewModel = mapsViewModel,
+                    onNavigateToMarkerItem = { navController.navigate(Screen.MarkerItem.route) }
+                )
+            }
+            composable(Screen.MarkerItem.route) {
+                MarkerItemScreen(mapsViewModel = mapsViewModel)
             }
         }
     }

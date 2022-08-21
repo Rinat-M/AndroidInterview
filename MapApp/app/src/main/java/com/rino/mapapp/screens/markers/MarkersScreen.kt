@@ -1,5 +1,6 @@
 package com.rino.mapapp.screens.markers
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -23,23 +24,31 @@ import com.rino.mapapp.screens.maps.MapsViewModel
 
 @Composable
 fun MarkersScreen(
-    mapsViewModel: MapsViewModel = viewModel()
+    mapsViewModel: MapsViewModel = viewModel(),
+    onNavigateToMarkerItem: () -> Unit
 ) {
     MarkersList(
         markers = mapsViewModel.markers,
-        onDeleteClick = { marker -> mapsViewModel.remove(marker) })
+        onDeleteClick = { marker -> mapsViewModel.remove(marker) },
+        onMarkerClick = { marker ->
+            mapsViewModel.setSelectedMarker(marker)
+            onNavigateToMarkerItem()
+        }
+    )
 }
 
 @Composable
 private fun MarkersList(
     markers: List<MapMarker>,
-    onDeleteClick: (marker: MapMarker) -> Unit
+    onDeleteClick: (marker: MapMarker) -> Unit,
+    onMarkerClick: (marker: MapMarker) -> Unit
 ) {
     LazyColumn {
         items(markers) { marker ->
             MarkerItem(
                 marker = marker,
-                onDelete = { onDeleteClick(marker) }
+                onDelete = { onDeleteClick(marker) },
+                onClick = { onMarkerClick(marker) }
             )
         }
     }
@@ -49,7 +58,8 @@ private fun MarkersList(
 private fun MarkerItem(
     marker: MapMarker,
     modifier: Modifier = Modifier,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -60,6 +70,7 @@ private fun MarkerItem(
             modifier = modifier
                 .padding(8.dp)
                 .weight(1f)
+                .clickable { onClick() }
         ) {
             Text(text = marker.title, fontWeight = FontWeight.Bold)
             Text(text = marker.description, fontStyle = FontStyle.Italic)
@@ -84,6 +95,7 @@ fun DefaultPreview() {
             "Moscow",
             "Marker in Moscow"
         ),
-        onDelete = {}
+        onDelete = {},
+        onClick = {}
     )
 }
