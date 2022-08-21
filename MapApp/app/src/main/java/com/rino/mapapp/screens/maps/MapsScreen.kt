@@ -52,7 +52,12 @@ fun MapsScreen(
         onMapLoaded = { isMapLoaded = true },
         onMapClick = { point ->
             mapsViewModel.add(
-                MapMarker(point, "{Lat=${point.latitude};Lng=${point.longitude}")
+                MapMarker(
+                    point,
+                    "{Lat=${
+                        point.latitude.toString().substring(0, 9)
+                    };Lng=${point.longitude.toString().substring(0, 9)}"
+                )
             )
         }
     )
