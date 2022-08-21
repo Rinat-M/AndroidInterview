@@ -4,12 +4,13 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -57,6 +58,7 @@ fun MapsScreen(
         }
     )
 
+    MarkersIconButton(modifier = modifier, onButtonClick = {})
     ProgressIndicator(loadingIsComplete = isMapLoaded)
 }
 
@@ -102,6 +104,34 @@ private fun ProgressIndicator(loadingIsComplete: Boolean, modifier: Modifier = M
                     .background(MaterialTheme.colors.background)
                     .wrapContentSize()
             )
+        }
+    }
+}
+
+@Composable
+private fun MarkersIconButton(
+    modifier: Modifier = Modifier,
+    onButtonClick: () -> Unit
+) {
+
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Bottom,
+    ) {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+
+            Button(onClick = onButtonClick) {
+                Icon(
+                    imageVector = Icons.Filled.List,
+                    contentDescription = null
+                )
+                Text(text = "Markers")
+            }
         }
     }
 }
