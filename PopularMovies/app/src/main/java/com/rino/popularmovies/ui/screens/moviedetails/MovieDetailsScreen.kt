@@ -22,6 +22,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.rino.popularmovies.BuildConfig
 import com.rino.popularmovies.remote.entites.MovieDetailsDTO
+import com.rino.popularmovies.ui.screens.main.CircularProgressBar
 import com.rino.popularmovies.ui.theme.BlackWithOpacity80
 import com.rino.popularmovies.utils.toStringFormat
 import org.koin.androidx.compose.getViewModel
@@ -128,7 +129,7 @@ fun PosterSection(movieDetails: MovieDetailsDTO) {
             }
             Column(
                 modifier = Modifier.weight(2f),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
                     text = "Released: ${movieDetails.releaseDate.toStringFormat("dd MMM yyyy")}",
@@ -153,6 +154,9 @@ fun PosterSection(movieDetails: MovieDetailsDTO) {
                     modifier = Modifier.wrapContentSize(),
                     color = Color.White,
                     fontSize = 14.sp
+                )
+                CircularProgressBar(
+                    percentage = movieDetails.voteAverage.toFloat() / 10f,
                 )
             }
         }

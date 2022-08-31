@@ -120,6 +120,12 @@ fun TopMoviesItem(item: MovieDTO, modifier: Modifier = Modifier) {
                 else -> {}
             }
         }
+
+        CircularProgressBar(
+            modifier = Modifier.offset(15.dp, (-25).dp),
+            percentage = item.voteAverage.toFloat() / 10f,
+        )
+
         Text(
             text = item.title,
             modifier = Modifier
