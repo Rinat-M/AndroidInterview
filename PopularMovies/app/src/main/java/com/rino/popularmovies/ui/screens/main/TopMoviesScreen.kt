@@ -25,10 +25,16 @@ import com.rino.popularmovies.ui.theme.Grey100
 import com.rino.popularmovies.utils.toStringFormat
 
 @Composable
-fun TopMoviesScreen(viewModel: MainViewModel) {
+fun TopMoviesScreen(
+    viewModel: MainViewModel,
+    onNavigateToMovieDetails: (Long) -> Unit
+) {
     Column {
         TitleSection(modifier = Modifier.background(Grey100))
-        TopMoviesListSection(viewModel = viewModel)
+        TopMoviesListSection(
+            viewModel = viewModel,
+            onNavigateToMovieDetails = onNavigateToMovieDetails
+        )
     }
 }
 
@@ -45,7 +51,10 @@ fun TitleSection(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TopMoviesListSection(viewModel: MainViewModel) {
+fun TopMoviesListSection(
+    viewModel: MainViewModel,
+    onNavigateToMovieDetails: (Long) -> Unit
+) {
     val moviesList = viewModel.moviesPager.collectAsLazyPagingItems()
 
     LazyVerticalGrid(
@@ -57,7 +66,8 @@ fun TopMoviesListSection(viewModel: MainViewModel) {
                     item = item,
                     modifier = Modifier
                         .padding(8.dp)
-                        .clickable {})
+                        .clickable { onNavigateToMovieDetails(item.id) }
+                )
             }
         }
     }
