@@ -1,12 +1,14 @@
 package com.rino.popularmovies.repositories
 
 import com.rino.popularmovies.datasources.DataSource
-import com.rino.popularmovies.remote.entites.MovieDTO
+import com.rino.popularmovies.remote.entites.MoviesDTO
 
 class MoviesRepositoryImpl(
     private val dataSource: DataSource
 ) : MoviesRepository {
 
-    override fun getPopularMovies(): Result<List<MovieDTO>> = dataSource.getPopularMovies()
+    override suspend fun getPopularMovies(page: Int): MoviesDTO {
+        return dataSource.getPopularMovies(page)
+    }
 
 }

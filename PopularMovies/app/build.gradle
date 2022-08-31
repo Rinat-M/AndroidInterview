@@ -10,8 +10,8 @@ android {
         applicationId "com.rino.popularmovies"
         minSdk 28
         targetSdk 33
-        versionCode 6
-        versionName "1.0.5"
+        versionCode 7
+        versionName "1.0.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -63,6 +63,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     implementation 'androidx.activity:activity-compose:1.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
 
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
@@ -77,6 +78,12 @@ dependencies {
 
     // Koin
     implementation "io.insert-koin:koin-android:3.2.0"
+
+    // Coil
+    implementation "io.coil-kt:coil-compose:2.2.0"
+
+    //Paging 3.0
+    implementation 'androidx.paging:paging-compose:1.0.0-alpha16'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

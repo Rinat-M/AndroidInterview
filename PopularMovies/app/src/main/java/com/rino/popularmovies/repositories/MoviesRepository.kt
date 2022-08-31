@@ -1,9 +1,9 @@
 package com.rino.popularmovies.repositories
 
-import com.rino.popularmovies.remote.entites.MovieDTO
+import com.rino.popularmovies.remote.entites.MoviesDTO
 
 interface MoviesRepository {
 
-    fun getPopularMovies(): Result<List<MovieDTO>>
+    suspend fun getPopularMovies(page: Int): MoviesDTO
 
 }
