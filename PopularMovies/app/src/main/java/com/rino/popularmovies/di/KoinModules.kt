@@ -4,6 +4,8 @@ import com.rino.popularmovies.datasources.DataSource
 import com.rino.popularmovies.datasources.RemoteDataSourceImpl
 import com.rino.popularmovies.repositories.MoviesRepository
 import com.rino.popularmovies.repositories.MoviesRepositoryImpl
+import com.rino.popularmovies.ui.screens.main.MainViewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
@@ -14,4 +16,7 @@ val appModule = module {
     single { NetworkModule.getOkHttpClient() }
     single { NetworkModule.getRetrofit(get()) }
     single { NetworkModule.getMovieDbService(get()) }
+
+    // View Models
+    viewModel { MainViewModel(moviesRepository = get()) }
 }

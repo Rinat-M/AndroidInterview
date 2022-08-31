@@ -1,6 +1,5 @@
 package com.rino.popularmovies.paging
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.rino.popularmovies.remote.entites.MovieDTO
@@ -18,7 +17,6 @@ class MoviesPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieDTO> {
         return try {
-            Log.d("PAGING", "params.key - ${params.key}")
             val page = params.key ?: 1
             val moviesDTO = moviesRepository.getPopularMovies(page = page)
             LoadResult.Page(
