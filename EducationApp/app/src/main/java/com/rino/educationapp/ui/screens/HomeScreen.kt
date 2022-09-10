@@ -1,7 +1,10 @@
 package com.rino.educationapp.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -18,11 +21,16 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.rino.educationapp.R
+import com.rino.educationapp.core.Lesson
+import com.rino.educationapp.core.VerticalRotation
+import com.rino.educationapp.core.rotateVertically
+import com.rino.educationapp.core.background
 import com.rino.educationapp.ui.theme.*
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(mainViewModel: MainViewModel) {
     Box(
         modifier = Modifier
             .background(Grey900)
@@ -31,6 +39,7 @@ fun HomeScreen() {
         Column {
             TopSection(name = "Rinat")
             ExamsTimerSection()
+            ClassesSection(mainViewModel.lessons)
         }
     }
 }
@@ -172,5 +181,82 @@ fun OneDigit(digit: String, backgroundColor: Color) {
             style = MaterialTheme.typography.h5,
             modifier = Modifier.padding(9.dp)
         )
+    }
+}
+
+@Composable
+fun ClassesSection(lessons: List<Lesson>) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp)
+    ) {
+        Text(text = "Classes", color = Color.White)
+        Text(text = "${lessons.count()} classes today", color = Color.Gray)
+    }
+    LazyRow {
+        items(lessons.count()) {
+            ClassBlock(lessons[it])
+        }
+    }
+}
+
+@Composable
+fun ClassBlock(lesson: Lesson) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(16.dp)
+            .clip(RoundedCornerShape(24.dp))
+            .background(lesson.isAdditional)
+            .padding(PaddingValues(start = 15.dp))
+            .width(330.dp)
+            .height(100.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .border(2.dp, Color.Gray, CircleShape)
+                .clip(CircleShape)
+                .background(BlackWithOpacity50)
+                .padding(6.dp)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_menu_book),
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier
+                    .size(30.dp)
+                    .padding(4.dp)
+            )
+        }
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(text = lesson.title, color = Color.White)
+            Text(text = "${lesson.startTime}-${lesson.endTime}", color = Color.Gray)
+        }
+
+        if (lesson.bySkype) {
+            Box(
+                modifier = Modifier
+                    .width(50.dp)
+                    .fillMaxHeight()
+                    .background(Blue200),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = "Open in S", color = Color.White,
+                    modifier = Modifier
+                        .rotateVertically(VerticalRotation.CLOCKWISE),
+                    fontSize = 10.sp,
+                )
+            }
+        }
     }
 }

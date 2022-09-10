@@ -9,7 +9,9 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.rino.educationapp.core.DummyRepositoryImpl
 import com.rino.educationapp.ui.screens.HomeScreen
+import com.rino.educationapp.ui.screens.MainViewModel
 import com.rino.educationapp.ui.theme.EducationAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,7 +31,8 @@ fun MyApp() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colors.background
         ) {
-            HomeScreen()
+            val viewModel = MainViewModel(DummyRepositoryImpl())
+            HomeScreen(viewModel)
         }
     }
 }
