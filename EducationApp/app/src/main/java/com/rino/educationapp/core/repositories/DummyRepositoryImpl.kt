@@ -1,6 +1,9 @@
-package com.rino.educationapp.core
+package com.rino.educationapp.core.repositories
 
-class DummyRepositoryImpl() : MainRepository {
+import com.rino.educationapp.core.entity.Homework
+import com.rino.educationapp.core.entity.Lesson
+
+class DummyRepositoryImpl : MainRepository {
     override fun getLessons(): List<Lesson> {
         return listOf(
             Lesson(
@@ -27,6 +30,26 @@ class DummyRepositoryImpl() : MainRepository {
                 isAdditional = true,
                 bySkype = false
             )
+        )
+    }
+
+    override fun getHomeworks(): List<Homework> {
+        return listOf(
+            Homework(
+                title = "Literature",
+                description = "Read scenes 1.1-1.12 of The Master and Margarita",
+                daysLeft = 2
+            ),
+            Homework(
+                title = "Physics",
+                description = "Learn Newton's laws",
+                daysLeft = 5
+            ),
+            Homework(
+                title = "History",
+                description = "Learn Greek history",
+                daysLeft = 6
+            ),
         )
     }
 }

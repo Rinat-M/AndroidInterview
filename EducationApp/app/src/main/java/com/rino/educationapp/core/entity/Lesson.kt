@@ -1,4 +1,4 @@
-package com.rino.educationapp.core
+package com.rino.educationapp.core.entity
 
 data class Lesson(
     val title: String,

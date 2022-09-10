@@ -4,8 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -23,10 +25,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rino.educationapp.R
-import com.rino.educationapp.core.Lesson
+import com.rino.educationapp.core.entity.Lesson
 import com.rino.educationapp.core.VerticalRotation
 import com.rino.educationapp.core.rotateVertically
 import com.rino.educationapp.core.background
+import com.rino.educationapp.core.entity.Homework
 import com.rino.educationapp.ui.theme.*
 
 @Composable
@@ -36,10 +39,13 @@ fun HomeScreen(mainViewModel: MainViewModel) {
             .background(Grey900)
             .fillMaxSize()
     ) {
-        Column {
+        Column(
+            modifier = Modifier.verticalScroll(rememberScrollState())
+        ) {
             TopSection(name = "Rinat")
             ExamsTimerSection()
             ClassesSection(mainViewModel.lessons)
+            HomeworksSection(mainViewModel.homeworks)
         }
     }
 }
@@ -99,14 +105,14 @@ fun ExamsTimerSection() {
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .padding(15.dp)
+            .padding(horizontal = 15.dp)
             .clip(RoundedCornerShape(24.dp))
             .background(
                 Brush.linearGradient(
                     colors = listOf(Green400, Color.Cyan)
                 )
             )
-            .padding(horizontal = 15.dp, vertical = 20.dp)
+            .padding(horizontal = 15.dp, vertical = 10.dp)
             .fillMaxWidth()
     ) {
         Text(
@@ -191,7 +197,7 @@ fun ClassesSection(lessons: List<Lesson>) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(12.dp)
+            .padding(15.dp)
     ) {
         Text(text = "Classes", color = Color.White)
         Text(text = "${lessons.count()} classes today", color = Color.Gray)
@@ -209,7 +215,7 @@ fun ClassBlock(lesson: Lesson) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .padding(16.dp)
+            .padding(horizontal = 15.dp)
             .clip(RoundedCornerShape(24.dp))
             .background(lesson.isAdditional)
             .padding(PaddingValues(start = 15.dp))
@@ -239,7 +245,7 @@ fun ClassBlock(lesson: Lesson) {
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             Text(text = lesson.title, color = Color.White)
-            Text(text = "${lesson.startTime}-${lesson.endTime}", color = Color.Gray)
+            Text(text = "${lesson.startTime} - ${lesson.endTime}", color = Color.Gray)
         }
 
         if (lesson.bySkype) {
@@ -257,6 +263,92 @@ fun ClassBlock(lesson: Lesson) {
                     fontSize = 10.sp,
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun HomeworksSection(homeworks: List<Homework>) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(15.dp)
+    ) {
+        Text(text = "Homework", color = Color.White)
+    }
+    LazyRow {
+        items(homeworks.count()) {
+            HomeworkBlock(homeworks[it])
+        }
+    }
+}
+
+@Composable
+fun HomeworkBlock(homework: Homework) {
+    Column(
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.Start,
+        modifier = Modifier
+            .padding(horizontal = 15.dp)
+            .clip(RoundedCornerShape(24.dp))
+            .background(Grey800)
+            .size(200.dp)
+            .padding(24.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(text = homework.title, color = Color.White)
+                Text(
+                    text = "${homework.daysLeft} days left",
+                    color = Color.Gray,
+                    style = MaterialTheme.typography.body2
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .border(2.dp, Color.Gray, CircleShape)
+                    .clip(CircleShape)
+                    .background(BlackWithOpacity50)
+                    .padding(6.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_library_books),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.padding(2.dp)
+                )
+            }
+        }
+        Text(
+            text = homework.description,
+            color = Color.White,
+            fontSize = 12.sp
+        )
+        Row {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_account_circle),
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier
+                    .border(2.dp, Grey800, CircleShape)
+                    .size(30.dp)
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.ic_account_circle),
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier
+                    .offset((-8).dp)
+                    .size(30.dp)
+                    .border(2.dp, Grey800, CircleShape)
+            )
+
         }
     }
 }
