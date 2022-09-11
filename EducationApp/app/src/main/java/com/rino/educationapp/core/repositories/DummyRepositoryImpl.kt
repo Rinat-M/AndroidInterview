@@ -29,7 +29,23 @@ class DummyRepositoryImpl : MainRepository {
                 endTime = "11:35",
                 isAdditional = true,
                 bySkype = false
-            )
+            ),
+            Lesson(
+                title = "History",
+                teacher = "Mrs Thomas",
+                startTime = "12:00",
+                endTime = "12:45",
+                isAdditional = false,
+                bySkype = true
+            ),
+            Lesson(
+                title = "Literature",
+                teacher = "Mrs Barros",
+                startTime = "14:00",
+                endTime = "14:45",
+                isAdditional = false,
+                bySkype = false
+            ),
         )
     }
 
