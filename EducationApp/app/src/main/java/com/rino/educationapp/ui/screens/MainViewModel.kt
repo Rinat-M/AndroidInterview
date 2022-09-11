@@ -4,12 +4,12 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import com.rino.educationapp.core.repositories.MainRepository
 
-class MainViewModel(repository: MainRepository) : ViewModel() {
+class MainViewModel(mainRepository: MainRepository) : ViewModel() {
 
-    private val _lessons = repository.getLessons().toMutableStateList()
+    private val _lessons = mainRepository.getLessons().toMutableStateList()
     val lessons get() = _lessons
 
-    private val _homeworks = repository.getHomeworks().toMutableStateList()
+    private val _homeworks = mainRepository.getHomeworks().toMutableStateList()
     val homeworks get() = _homeworks
 
 }

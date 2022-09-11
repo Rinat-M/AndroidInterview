@@ -10,31 +10,30 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.rino.educationapp.core.entity.BottomNavItem
-import com.rino.educationapp.core.repositories.DummyRepositoryImpl
 import com.rino.educationapp.ui.base.BottomNavigationBar
 import com.rino.educationapp.ui.base.Screen
 import com.rino.educationapp.ui.screens.*
 import com.rino.educationapp.ui.theme.EducationAppTheme
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
+    private val mainViewModel: MainViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApp()
+            MyApp(mainViewModel)
         }
     }
 }
 
 @Composable
-fun MyApp() {
-    val mainViewModel = MainViewModel(DummyRepositoryImpl())
-
+fun MyApp(mainViewModel: MainViewModel) {
     EducationAppTheme {
         val navController = rememberNavController()
         Scaffold(
@@ -96,10 +95,4 @@ fun Navigation(navController: NavHostController, mainViewModel: MainViewModel) {
         composable(Screen.Homework.route) { HomeworkScreen() }
         composable(Screen.Favorites.route) { FavoritesScreen() }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    MyApp()
 }
