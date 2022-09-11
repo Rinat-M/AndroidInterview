@@ -66,3 +66,11 @@ fun Modifier.background(isAdditional: Boolean): Modifier {
         this.background(Grey800)
     }
 }
+
+fun Modifier.bottomNavItemBackground(isSelected: Boolean): Modifier {
+    return if (isSelected) {
+        this.background(Brush.linearGradient(colors = listOf(Color.Gray, Color.Transparent)))
+    } else {
+        this.background(Color.DarkGray)
+    }
+}
