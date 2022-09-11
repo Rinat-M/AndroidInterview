@@ -92,7 +92,7 @@ fun Navigation(navController: NavHostController, mainViewModel: MainViewModel) {
         startDestination = Screen.Home.route
     ) {
         composable(Screen.Home.route) { HomeScreen(mainViewModel) }
-        composable(Screen.Classes.route) { ClassesScreen() }
+        composable(Screen.Classes.route) { ClassesScreen(mainViewModel) }
         composable(Screen.Homework.route) { HomeworkScreen() }
         composable(Screen.Favorites.route) { FavoritesScreen() }
     }
