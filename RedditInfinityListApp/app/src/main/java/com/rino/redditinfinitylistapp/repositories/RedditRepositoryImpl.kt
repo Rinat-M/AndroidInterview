@@ -7,7 +7,7 @@ class RedditRepositoryImpl(
     private val redditService: RedditService
 ) : RedditRepository {
 
-    override suspend fun getHotPosts(after: String, limit: Int): ResponseDTO? {
+    override suspend fun getHotPosts(after: String?, limit: Int): ResponseDTO? {
         val response = redditService.getHotPosts(after, limit)
         return response.body()
     }

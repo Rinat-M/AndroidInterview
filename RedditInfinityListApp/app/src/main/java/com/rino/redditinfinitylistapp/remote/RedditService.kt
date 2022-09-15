@@ -9,7 +9,7 @@ interface RedditService {
 
     @GET("r/aww/hot.json")
     suspend fun getHotPosts(
-        @Query("after") after: String,
+        @Query("after") after: String?,
         @Query("limit") limit: Int = 25
     ): Response<ResponseDTO>
 
