@@ -1,5 +1,7 @@
 package com.rino.redditinfinitylistapp.ui.screens
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
@@ -16,6 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.rino.redditinfinitylistapp.R
 import com.rino.redditinfinitylistapp.remote.entities.PostDataDTO
 import com.rino.redditinfinitylistapp.ui.theme.Orange900
@@ -61,10 +65,40 @@ fun HotPostsItem(
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        Text(
-            text = item.title,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+        Row {
+            Box(
+                modifier = Modifier
+                    .size(50.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                val painter = rememberAsyncImagePainter(model = item.thumbnail)
+                Image(
+                    painter = painter,
+                    contentDescription = item.title,
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .height(50.dp)
+                        .background(Color.LightGray)
+                        .padding(2.dp),
+                    alignment = Alignment.Center
+                )
+
+                when (painter.state) {
+                    is AsyncImagePainter.State.Loading -> {
+                        CircularProgressIndicator(
+                            Modifier
+                                .size(25.dp)
+                                .align(Alignment.Center))
+                    }
+                    is AsyncImagePainter.State.Error -> {}
+                    else -> {}
+                }
+            }
+            Text(
+                text = item.title,
+                modifier = Modifier.padding(start = 8.dp, bottom = 16.dp)
+            )
+        }
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
