@@ -16,28 +16,27 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rino.pressureandpulse.R
 import com.rino.pressureandpulse.entities.Measurement
-import com.rino.pressureandpulse.repositories.DummyMeasurementsRepositoryImpl
 import com.rino.pressureandpulse.ui.theme.*
 import com.rino.pressureandpulse.utils.toStringFormat
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
+    private val mainViewModel: MainViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApp()
+            MyApp(mainViewModel)
         }
     }
 }
 
 @Composable
-fun MyApp() {
-    val mainViewModel = MainViewModel(DummyMeasurementsRepositoryImpl())
-
+fun MyApp(mainViewModel: MainViewModel) {
     PressureAndPulseTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -82,11 +81,8 @@ fun MeasurementsList(grouped: Map<String, List<Measurement>>) {
             }
 
             items(measurements) { measurement ->
-                val color = if (measurement.lowerPressure < 60 || measurement.lowerPressure > 80
-                    || measurement.topPressure < 110 || measurement.topPressure > 139
-                )
-                    YellowA100 else LightGreenA100
-                MeasurementsListItem(measurement, color)
+                val color = if (isAbnormalPressure(measurement)) YellowA100 else LightGreenA100
+                MeasurementsListItem(measurement, color, modifier = Modifier.animateItemPlacement())
                 Divider(color = Color.LightGray, thickness = 1.dp)
             }
         }
@@ -94,13 +90,13 @@ fun MeasurementsList(grouped: Map<String, List<Measurement>>) {
 }
 
 @Composable
-fun MeasurementsListHeader(header: String) {
+fun MeasurementsListHeader(header: String, modifier: Modifier = Modifier) {
     Text(
         text = header,
         fontSize = 18.sp,
         color = Grey600,
         fontWeight = FontWeight.Bold,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(
                 Brush.horizontalGradient(
@@ -112,9 +108,9 @@ fun MeasurementsListHeader(header: String) {
 }
 
 @Composable
-fun MeasurementsListItem(item: Measurement, color: Color) {
+fun MeasurementsListItem(item: Measurement, color: Color, modifier: Modifier = Modifier) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(
                 Brush.radialGradient(
@@ -186,8 +182,6 @@ fun Pulse(pulse: Int) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    MyApp()
-}
+fun isAbnormalPressure(measurement: Measurement): Boolean =
+    measurement.lowerPressure < 60 || measurement.lowerPressure > 80
+            || measurement.topPressure < 110 || measurement.topPressure > 139
