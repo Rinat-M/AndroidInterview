@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rino.pressureandpulse.R
 import com.rino.pressureandpulse.entities.Measurement
+import com.rino.pressureandpulse.ui.dialogs.MeasurementDialog
 import com.rino.pressureandpulse.ui.theme.*
 import com.rino.pressureandpulse.utils.toStringFormat
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -37,6 +38,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MyApp(mainViewModel: MainViewModel) {
+    var showMeasurementDialog by remember { mutableStateOf(false) }
+
     PressureAndPulseTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -48,7 +51,9 @@ fun MyApp(mainViewModel: MainViewModel) {
                 FloatingActionButton(
                     backgroundColor = Color.Red,
                     modifier = Modifier.padding(16.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = {
+                        showMeasurementDialog = !showMeasurementDialog
+                    }
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_favorite),
@@ -65,6 +70,14 @@ fun MyApp(mainViewModel: MainViewModel) {
                     .fillMaxSize(),
             ) {
                 MeasurementsList(mainViewModel.measurementsGrouped)
+            }
+
+            if (showMeasurementDialog) {
+                MeasurementDialog(
+                    measurement = Measurement(120, 70, 60),
+                    onDismiss = { showMeasurementDialog = !showMeasurementDialog },
+                    onNegativeClick = { showMeasurementDialog = !showMeasurementDialog },
+                    onPositiveClick = { /*TODO*/ })
             }
         }
     }
