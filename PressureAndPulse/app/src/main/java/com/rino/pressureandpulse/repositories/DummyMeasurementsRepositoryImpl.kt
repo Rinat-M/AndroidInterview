@@ -4,7 +4,7 @@ import com.rino.pressureandpulse.entities.Measurement
 import java.util.*
 
 class DummyMeasurementsRepositoryImpl : MeasurementsRepository {
-    private val fakeMeasurements = listOf(
+    private val fakeMeasurements = mutableListOf(
         Measurement(150, 83, 55, Date(1635015960000)),
         Measurement(129, 79, 55, Date(1634964660000)),
         Measurement(141, 64, 63, Date(1635102420000)),
@@ -17,9 +17,12 @@ class DummyMeasurementsRepositoryImpl : MeasurementsRepository {
         Measurement(126, 67, 49, Date(1635314640000)),
     )
 
-
     override fun getMeasurements(): List<Measurement> {
         return fakeMeasurements.sortedByDescending { it.dateOfMeasurement }
+    }
+
+    override fun addMeasurement(measurement: Measurement) {
+        fakeMeasurements.add(measurement)
     }
 
 }

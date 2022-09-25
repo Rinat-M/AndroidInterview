@@ -39,6 +39,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyApp(mainViewModel: MainViewModel) {
     var showMeasurementDialog by remember { mutableStateOf(false) }
+    val groupedMeasurements by mainViewModel.measurementsGroupedFlow.collectAsState(emptyMap())
 
     PressureAndPulseTheme {
         Scaffold(
@@ -69,7 +70,7 @@ fun MyApp(mainViewModel: MainViewModel) {
                     .padding(innerPadding)
                     .fillMaxSize(),
             ) {
-                MeasurementsList(mainViewModel.measurementsGrouped)
+                MeasurementsList(groupedMeasurements)
             }
 
             if (showMeasurementDialog) {
@@ -77,7 +78,10 @@ fun MyApp(mainViewModel: MainViewModel) {
                     measurement = Measurement(120, 70, 60),
                     onDismiss = { showMeasurementDialog = !showMeasurementDialog },
                     onNegativeClick = { showMeasurementDialog = !showMeasurementDialog },
-                    onPositiveClick = { /*TODO*/ })
+                    onPositiveClick = { measurement ->
+                        mainViewModel.addMeasurement(measurement)
+                        showMeasurementDialog = !showMeasurementDialog
+                    })
             }
         }
     }

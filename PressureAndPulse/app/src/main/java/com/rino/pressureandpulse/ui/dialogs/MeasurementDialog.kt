@@ -27,16 +27,20 @@ fun MeasurementDialog(
     measurement: Measurement,
     onDismiss: () -> Unit,
     onNegativeClick: () -> Unit,
-    onPositiveClick: () -> Unit
+    onPositiveClick: (Measurement) -> Unit
 ) {
     val calendar = Calendar.getInstance()
-    calendar.time = measurement.dateOfMeasurement
+    var dateOfMeasurement by remember { mutableStateOf(measurement.dateOfMeasurement) }
 
     var showCalendarDialog by remember { mutableStateOf(false) }
     var dateString by remember { mutableStateOf(calendar.time.toStringFormat()) }
 
     var showTimeDialog by remember { mutableStateOf(false) }
     var timeString by remember { mutableStateOf(calendar.time.toStringFormat("HH:mm")) }
+
+    var topPressure by remember { mutableStateOf(0) }
+    var lowerPressure by remember { mutableStateOf(0) }
+    var pulse by remember { mutableStateOf(0) }
 
     Dialog(onDismissRequest = onDismiss) {
         Card(
@@ -54,9 +58,19 @@ fun MeasurementDialog(
                     onDateClick = { showCalendarDialog = !showCalendarDialog },
                     onTimeClick = { showTimeDialog = !showTimeDialog },
                 )
-                PressureSelectionSection(onTopPressureChosen = {}, onLowerPressureChosen = {})
-                PulseSelectionSection(onPulseChosen = {})
-                ButtonsSection(onNegativeClick = onNegativeClick, onPositiveClick = onPositiveClick)
+                PressureSelectionSection(
+                    onTopPressureChosen = { value -> topPressure = value.toInt() },
+                    onLowerPressureChosen = { value -> lowerPressure = value.toInt() })
+                PulseSelectionSection(onPulseChosen = { value -> pulse = value.toInt() })
+                ButtonsSection(onNegativeClick = onNegativeClick, onPositiveClick = {
+                    val measurement = Measurement(
+                        topPressure = topPressure,
+                        lowerPressure = lowerPressure,
+                        pulse = pulse,
+                        dateOfMeasurement = dateOfMeasurement
+                    )
+                    onPositiveClick(measurement)
+                })
             }
         }
     }
@@ -65,7 +79,9 @@ fun MeasurementDialog(
         CalendarDialog(
             onDismiss = { showCalendarDialog = !showCalendarDialog },
             onDateChange = { year, month, dayOfMonth ->
+                calendar.time = dateOfMeasurement
                 calendar.set(year, month, dayOfMonth)
+                dateOfMeasurement = calendar.time
                 dateString = calendar.time.toStringFormat()
                 showCalendarDialog = !showCalendarDialog
             }
@@ -78,8 +94,10 @@ fun MeasurementDialog(
             initialValue = initialValue,
             onDismiss = { showTimeDialog = !showTimeDialog },
             onTimeChange = { hour, minute ->
+                calendar.time = dateOfMeasurement
                 calendar.set(Calendar.HOUR_OF_DAY, hour)
                 calendar.set(Calendar.MINUTE, minute)
+                dateOfMeasurement = calendar.time
                 timeString = calendar.time.toStringFormat("HH:mm")
                 showTimeDialog = !showTimeDialog
             }
