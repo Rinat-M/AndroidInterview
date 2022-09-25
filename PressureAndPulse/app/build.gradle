@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -11,8 +12,8 @@ android {
         applicationId "com.rino.pressureandpulse"
         minSdk 28
         targetSdk 33
-        versionCode 5
-        versionName "1.0.5"
+        versionCode 6
+        versionName "1.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -57,6 +58,9 @@ dependencies {
 
     // Koin
     implementation "io.insert-koin:koin-androidx-compose:3.2.0"
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.3.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
