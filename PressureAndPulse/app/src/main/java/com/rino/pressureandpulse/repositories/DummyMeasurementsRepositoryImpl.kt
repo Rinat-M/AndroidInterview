@@ -1,6 +1,7 @@
 package com.rino.pressureandpulse.repositories
 
 import com.rino.pressureandpulse.entities.Measurement
+import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 class DummyMeasurementsRepositoryImpl : MeasurementsRepository {
@@ -17,8 +18,8 @@ class DummyMeasurementsRepositoryImpl : MeasurementsRepository {
         Measurement(126, 67, 49, Date(1635314640000)),
     )
 
-    override fun getMeasurements(): List<Measurement> {
-        return fakeMeasurements.sortedByDescending { it.dateOfMeasurement }
+    override fun getMeasurementsFlow(): Flow<List<Measurement>> {
+        TODO("Not yet implemented")
     }
 
     override fun addMeasurement(measurement: Measurement) {

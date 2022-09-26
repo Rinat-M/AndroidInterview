@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface MeasurementsRepository {
 
-    fun getMeasurements(): List<Measurement>
+    fun getMeasurementsFlow(): Flow<List<Measurement>>
 
     fun addMeasurement(measurement: Measurement)
 
