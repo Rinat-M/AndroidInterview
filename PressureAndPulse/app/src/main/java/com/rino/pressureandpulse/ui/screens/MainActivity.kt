@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -41,6 +42,9 @@ fun MyApp(mainViewModel: MainViewModel) {
     var showMeasurementDialog by remember { mutableStateOf(false) }
     val groupedMeasurements by mainViewModel.measurementsGroupedFlow.collectAsState(emptyMap())
 
+    val normalMeasurement = Measurement(120, 70, 60)
+    var selectedMeasurement by remember { mutableStateOf(normalMeasurement) }
+
     PressureAndPulseTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -70,16 +74,34 @@ fun MyApp(mainViewModel: MainViewModel) {
                     .padding(innerPadding)
                     .fillMaxSize(),
             ) {
-                MeasurementsList(groupedMeasurements)
+                MeasurementsList(
+                    grouped = groupedMeasurements,
+                    onItemClick = { measurement ->
+                        selectedMeasurement = measurement
+                        showMeasurementDialog = !showMeasurementDialog
+
+                    })
             }
 
             if (showMeasurementDialog) {
                 MeasurementDialog(
-                    measurement = Measurement(120, 70, 60),
-                    onDismiss = { showMeasurementDialog = !showMeasurementDialog },
-                    onNegativeClick = { showMeasurementDialog = !showMeasurementDialog },
+                    measurement = selectedMeasurement,
+                    onDismiss = {
+                        selectedMeasurement = normalMeasurement
+                        showMeasurementDialog = !showMeasurementDialog
+                    },
+                    onNegativeClick = {
+                        selectedMeasurement = normalMeasurement
+                        showMeasurementDialog = !showMeasurementDialog
+                    },
                     onPositiveClick = { measurement ->
-                        mainViewModel.addMeasurement(measurement)
+                        if (measurement.id.isEmpty()) {
+                            mainViewModel.addMeasurement(measurement)
+                        } else {
+                            mainViewModel.updateMeasurement(measurement)
+                        }
+
+                        selectedMeasurement = normalMeasurement
                         showMeasurementDialog = !showMeasurementDialog
                     })
             }
@@ -89,7 +111,10 @@ fun MyApp(mainViewModel: MainViewModel) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MeasurementsList(grouped: Map<String, List<Measurement>>) {
+fun MeasurementsList(
+    grouped: Map<String, List<Measurement>>,
+    onItemClick: (measurement: Measurement) -> Unit
+) {
     LazyColumn {
         grouped.forEach { (header, measurements) ->
             stickyHeader {
@@ -97,9 +122,17 @@ fun MeasurementsList(grouped: Map<String, List<Measurement>>) {
                 Divider(color = Color.LightGray, thickness = 1.dp)
             }
 
-            items(measurements) { measurement ->
+            items(measurements, key = { it.id }) { measurement ->
                 val color = if (isAbnormalPressure(measurement)) YellowA100 else LightGreenA100
-                MeasurementsListItem(measurement, color, modifier = Modifier.animateItemPlacement())
+                MeasurementsListItem(
+                    item = measurement,
+                    color = color,
+                    modifier = Modifier
+                        .animateItemPlacement()
+                        .clickable {
+                            onItemClick(measurement)
+                        }
+                )
                 Divider(color = Color.LightGray, thickness = 1.dp)
             }
         }

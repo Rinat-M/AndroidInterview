@@ -33,14 +33,14 @@ fun MeasurementDialog(
     var dateOfMeasurement by remember { mutableStateOf(measurement.dateOfMeasurement) }
 
     var showCalendarDialog by remember { mutableStateOf(false) }
-    var dateString by remember { mutableStateOf(calendar.time.toStringFormat()) }
+    var dateString by remember { mutableStateOf(dateOfMeasurement.toStringFormat()) }
 
     var showTimeDialog by remember { mutableStateOf(false) }
-    var timeString by remember { mutableStateOf(calendar.time.toStringFormat("HH:mm")) }
+    var timeString by remember { mutableStateOf(dateOfMeasurement.toStringFormat("HH:mm")) }
 
-    var topPressure by remember { mutableStateOf(0) }
-    var lowerPressure by remember { mutableStateOf(0) }
-    var pulse by remember { mutableStateOf(0) }
+    var topPressure by remember { mutableStateOf(measurement.topPressure) }
+    var lowerPressure by remember { mutableStateOf(measurement.lowerPressure) }
+    var pulse by remember { mutableStateOf(measurement.pulse) }
 
     Dialog(onDismissRequest = onDismiss) {
         Card(
@@ -59,18 +59,27 @@ fun MeasurementDialog(
                     onTimeClick = { showTimeDialog = !showTimeDialog },
                 )
                 PressureSelectionSection(
+                    topPressureValue = topPressure.toString(),
+                    lowerPressureValue = lowerPressure.toString(),
                     onTopPressureChosen = { value -> topPressure = value.toInt() },
-                    onLowerPressureChosen = { value -> lowerPressure = value.toInt() })
-                PulseSelectionSection(onPulseChosen = { value -> pulse = value.toInt() })
-                ButtonsSection(onNegativeClick = onNegativeClick, onPositiveClick = {
-                    val measurement = Measurement(
-                        topPressure = topPressure,
-                        lowerPressure = lowerPressure,
-                        pulse = pulse,
-                        dateOfMeasurement = dateOfMeasurement
-                    )
-                    onPositiveClick(measurement)
-                })
+                    onLowerPressureChosen = { value -> lowerPressure = value.toInt() }
+                )
+                PulseSelectionSection(
+                    pulseValue = pulse.toString(),
+                    onPulseChosen = { value -> pulse = value.toInt() }
+                )
+                ButtonsSection(
+                    onNegativeClick = onNegativeClick,
+                    onPositiveClick = {
+                        val newMeasurement = measurement.copy(
+                            topPressure = topPressure,
+                            lowerPressure = lowerPressure,
+                            pulse = pulse,
+                            dateOfMeasurement = dateOfMeasurement
+                        )
+                        onPositiveClick(newMeasurement)
+                    }
+                )
             }
         }
     }
@@ -134,11 +143,13 @@ fun DateTimeSection(
 
 @Composable
 fun PressureSelectionSection(
+    topPressureValue: String,
+    lowerPressureValue: String,
     onTopPressureChosen: (String) -> Unit,
     onLowerPressureChosen: (String) -> Unit,
 ) {
-    val topPressureValues = (0..238).map { it.toString() }
-    val lowerPressureValues = (0..118).map { it.toString() }
+    val topPressureValues = (0..240).map { it.toString() }
+    val lowerPressureValues = (0..120).map { it.toString() }
 
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -149,7 +160,7 @@ fun PressureSelectionSection(
     ) {
         InfiniteItemsPicker(
             items = topPressureValues,
-            firstIndex = topPressureValues.size / 2,
+            firstIndex = topPressureValues.indexOf(topPressureValue),
             onItemSelected = onTopPressureChosen
         )
         Text(
@@ -160,7 +171,7 @@ fun PressureSelectionSection(
         )
         InfiniteItemsPicker(
             items = lowerPressureValues,
-            firstIndex = lowerPressureValues.size / 2,
+            firstIndex = lowerPressureValues.indexOf(lowerPressureValue),
             onItemSelected = onLowerPressureChosen
         )
     }
@@ -173,7 +184,7 @@ fun InfiniteItemsPicker(
     onItemSelected: (String) -> Unit,
 ) {
 
-    val listState = rememberLazyListState(firstIndex)
+    val listState = rememberLazyListState(firstIndex - 1)
     val currentValue = remember { mutableStateOf("") }
 
     LaunchedEffect(key1 = !listState.isScrollInProgress) {
@@ -211,6 +222,7 @@ fun InfiniteItemsPicker(
 
 @Composable
 fun PulseSelectionSection(
+    pulseValue: String,
     onPulseChosen: (String) -> Unit,
 ) {
     val pulseValues = (0..140).map { it.toString() }
@@ -233,7 +245,7 @@ fun PulseSelectionSection(
         Spacer(modifier = Modifier.size(16.dp))
         InfiniteItemsPicker(
             items = pulseValues,
-            firstIndex = pulseValues.size / 2,
+            firstIndex = pulseValues.indexOf(pulseValue),
             onItemSelected = onPulseChosen
         )
     }

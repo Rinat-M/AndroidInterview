@@ -9,4 +9,6 @@ interface MeasurementsRepository {
 
     fun addMeasurement(measurement: Measurement)
 
+    fun updateMeasurement(measurement: Measurement)
+
 }

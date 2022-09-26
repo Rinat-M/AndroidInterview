@@ -7,7 +7,7 @@ data class Measurement(
     val lowerPressure: Int = 0,
     val pulse: Int = 0,
     val dateOfMeasurement: Date = Date(),
-    val id: String = ""
+    var id: String = ""
 ) {
 
     fun toMap(): Map<String, Any> {

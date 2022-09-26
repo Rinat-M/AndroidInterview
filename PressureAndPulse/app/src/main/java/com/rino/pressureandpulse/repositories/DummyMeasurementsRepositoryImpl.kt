@@ -26,4 +26,8 @@ class DummyMeasurementsRepositoryImpl : MeasurementsRepository {
         fakeMeasurements.add(measurement)
     }
 
+    override fun updateMeasurement(measurement: Measurement) {
+        TODO("Not yet implemented")
+    }
+
 }

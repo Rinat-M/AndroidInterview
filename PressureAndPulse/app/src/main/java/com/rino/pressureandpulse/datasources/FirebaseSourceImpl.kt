@@ -31,7 +31,9 @@ class FirebaseSourceImpl : MeasurementsSource {
 
             try {
                 val measurements = snapshot.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject<Measurement>()
+                    documentSnapshot.toObject<Measurement>()?.apply {
+                        this.id = documentSnapshot.id
+                    }
                 }
                 trySend(measurements)
             } catch (e: Throwable) {

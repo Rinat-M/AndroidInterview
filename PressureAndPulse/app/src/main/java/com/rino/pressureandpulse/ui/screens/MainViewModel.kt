@@ -18,4 +18,8 @@ class MainViewModel(
     fun addMeasurement(measurement: Measurement) {
         measurementsRepository.addMeasurement(measurement)
     }
+
+    fun updateMeasurement(measurement: Measurement) {
+        measurementsRepository.updateMeasurement(measurement)
+    }
 }

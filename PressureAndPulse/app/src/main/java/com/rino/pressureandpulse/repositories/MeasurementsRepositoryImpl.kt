@@ -16,4 +16,8 @@ class MeasurementsRepositoryImpl(
         measurementsSource.addMeasurement(measurement)
     }
 
+    override fun updateMeasurement(measurement: Measurement) {
+        measurementsSource.updateMeasurement(measurement)
+    }
+
 }
